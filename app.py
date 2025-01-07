@@ -3,11 +3,10 @@
 import streamlit as st
 import joblib
 import re
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Model va vektorizatorni yuklash
 model = joblib.load('model_phishing.pkl')
-vectorizer = TfidfVectorizer()
+vectorizer = joblib.load('vectorizer.pkl')
 
 # Emailni oldindan qayta ishlash funksiyasi
 def preprocess_text(text):
@@ -33,7 +32,7 @@ if st.button("Aniqlash"):
         # Emailni qayta ishlash
         processed_email = preprocess_text(email_input)
         # Matnni TF-IDF formatiga o'tkazish
-        email_features = vectorizer.fit_transform([processed_email]).toarray()
+        email_features = vectorizer.transform([processed_email])
         # Bashorat qilish
         prediction = model.predict(email_features)
         # Natijalarni ko'rsatish
